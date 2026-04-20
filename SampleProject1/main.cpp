@@ -100,8 +100,40 @@ int main()
 
 	cout << "------------------------------------------------\n";
 		
-	// 3. sizeof 연산자를 이용한 메모리 크기 확인
-	cout << "[Memory Check ] int type size: " << sizeof(hp) << "bytes\n";
-	cout << "[Memory Check ] bool type size: " << sizeof(isHardcore) << "bytes\n";
+	int goblinHp = 30;
+	int action;
+	
+	cout << "\nA wild Goblin appears!\n";
+	while (goblinHp > 0 && hp > 0) {
+		cout << "\n[ Goblin HP: " << goblinHp << " | My HP: " << hp << " ]\n";
+		cout << "\n1. Attack :";
+		cin >> action;
+
+		if (action == 1) {
+			// 1. 플레이어 공격
+			goblinHp -= attackDamage;
+			cout << "=> You Attacked the wild Goblin! (-" << attackDamage << ")\n";
+
+			// 2. 고블린이 살아있다면 반격
+			if (goblinHp > 0) {
+				hp -= 30;
+				cout << "=> The wild Goblin attacked you! (-30)\n";
+			}
+		}
+		else {
+			cout << "=> Invalid action. Please choose a valid action.\n";
+			hp -= 30;
+			cout << "=> The wild Goblin attacked you! (-30)\n";
+		}
+	}
+
+	cout << "\n";
+	if (hp <= 0) {
+		cout << "[System] You have been defeated by the wild Goblin...\n";
+	}
+	else {
+		cout << "[System] Congratulations! You defeated the wild Goblin!\n";
+	}
+
 	return 0;
 }
