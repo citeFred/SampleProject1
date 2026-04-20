@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <cstdlib> // rand() , srand() 
+#include <ctime>   // time() for seeding random number generator
 using namespace std;
 
 int main()
@@ -133,6 +135,33 @@ int main()
 	}
 	else {
 		cout << "[System] Congratulations! You defeated the wild Goblin!\n";
+
+		srand((unsigned int)time(NULL));
+		cout << "-------------------Looting Items------------------\n";
+
+		for (int i = 0; i <= 3; i++) {
+			int lootRoll = rand() % 4;
+			string itemName;
+
+			// 뽑힌 숫자에 따라 아이템 이름 결정
+			if (lootRoll == 0) {
+				itemName = "Gold";
+			}
+			else if (lootRoll == 1) {
+				itemName = "Healing Potion";
+			}
+			else if (lootRoll == 2) {
+				itemName = "Weapon";
+			}
+			else {
+				itemName = "Armor";
+			}
+
+			// 획득 결과 출력
+			cout << i << ". Get [" << itemName << "]\n";
+		}
+		cout << "---------------------------------------------------\n";
+
 	}
 
 	return 0;
