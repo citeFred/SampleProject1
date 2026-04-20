@@ -3,7 +3,15 @@ using namespace std;
 
 int main()
 {
-	cout << "Hello World1\n";
-	cout << "Hello World2" << endl;
+	char userName[50];
+
+	cout << "[ User name ]\n";
+	cout << "Input your name: ";
+
+	cin >> userName;
+
+	cout << ":::::::::Welcom to the D&D World :::::::::\n";
+	cout << "User Name : [" << userName << "]! \n";
+
 	return 0;
 }
