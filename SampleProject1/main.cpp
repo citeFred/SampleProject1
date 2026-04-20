@@ -1,8 +1,9 @@
 #include <iostream>
+using namespace std;
 
 int main()
 {
-	std::cout << "Hello World1\n";
-	std::cout << "Hello World2" << std::endl;
+	cout << "Hello World1\n";
+	cout << "Hello World2" << endl;
 	return 0;
 }
