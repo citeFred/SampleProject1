@@ -1,11 +1,13 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 int main()
 {
 	char userName[50];
-	char charactorClass[50];
+	string charactorClass;
 	char hardcoreInput;
+	int classChoiceInput;
 
 	// 스탯 시스템
 	int strength = 50;
@@ -33,8 +35,27 @@ int main()
 	cout << "[ Character Creation ]\n";
 	cout << "Input your Name : ";
 	cin >> userName;
-	cout << "Input your Class : ";
-	cin >> charactorClass;
+	cout << "Select your Class : \n";
+	cout << "1. Amazon\n2. Assassin\n3. Barbarian\n4. Druid\n";
+	cout << "5. Necromancer\n6. Paladin\n7. Sorceress\n8. Warlock\n";
+	cout << "Input Class Number : ";
+	cin >> classChoiceInput;
+	
+	switch (classChoiceInput) {
+	case 1: charactorClass = "Amazon"; break;
+	case 2: charactorClass = "Assassin"; break;
+	case 3: charactorClass = "Barbarian"; break;
+	case 4: charactorClass = "Druid"; break;
+	case 5: charactorClass = "Necromancer"; break;
+	case 6: charactorClass = "Paladin"; break;
+	case 7: charactorClass = "Sorceress"; break;
+	case 8: charactorClass = "Warlock"; break;
+	default:
+		charactorClass = "Unknown";
+		cout << "[System] Invalid class selection. Defaulting to 'Unknown'.\n";
+		break;
+	}
+	
 	cout << "Enable Hardcore Mode? (1)Yes / (2)No : ";
 	cin >> hardcoreInput;
 
