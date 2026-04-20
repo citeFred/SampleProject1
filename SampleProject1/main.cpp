@@ -6,17 +6,19 @@ int main()
 	char userName[50];
 	char charactorClass[50];
 
-	// 1. 다양한 자료형의 변수 선언 및 초기값 할당
-	int level = 1;
-	int hp = 100;
-	int mp = 100;
-	float attackSpeed = 5.5f;
-
 	// 스탯 시스템
 	int strength = 50;
 	int dexterity = 50;
 	int vitality = 50;
 	int energy = 50;
+
+	// 1. 다양한 자료형의 변수 선언 및 초기값 할당
+	int level = 1;
+	int hp = 100;
+	int mp = 100;
+	float attackDamage = strength * 0.2f;
+	float attackSpeed = dexterity / 10.0f;
+	double movingSpeed = dexterity / 30.0f;
 
 	// 저항 시스템
 	int fireResist = 0;
@@ -42,7 +44,9 @@ int main()
 	cout << "Level : " << level << "\n";
 	cout << "HP : " << hp << "\n";
 	cout << "MP : " << mp << "\n";
+	cout << "Attack Damage : " << attackDamage << "\n";
 	cout << "Attack Speed : " << attackSpeed << "\n";
+	cout << "Moving Speed : " << movingSpeed << "\n";
 	cout << "Strength : " << strength << "\n";
 	cout << "Dexterity : " << dexterity << "\n";
 	cout << "Vitality : " << vitality << "\n";
