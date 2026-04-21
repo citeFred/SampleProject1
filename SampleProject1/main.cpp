@@ -67,7 +67,7 @@
 		system("pause"); // 포인터 주소값 확인을 위한 대기
 
 		// 배열의 메모리 구조 확인
-		int scores[5] = { 85, 92, 78, 95, 88 };
+		int scores[5] = { 85, 92, 78, 95, 88 }; 
 		cout << "&scores[0] : " << &scores[0] << "\n";
 		cout << "&scores[1] : " << &scores[1] << "\n";
 		cout << "&scores[2] : " << &scores[2] << "\n";
@@ -82,6 +82,17 @@
 		cout << "&scores[0] : " << &scores[0] << "\n"; // 첫 원소 주소
 		cout << "scores[2] : " << scores[2] << "\n"; // 인덱스로 접근
 		cout << "*(scores+2) : " << *(scores+2) << "\n"; // 포인터 연산
+
+		// 형변환의 예외상황 1. sizeof() 사용
+		cout << "sizeof(scores) : " << sizeof(scores) << "\n";
+		cout << "sizeof(scores[0]) : " << sizeof(scores[0]) << "\n";
+		cout << "scores 원소개수 : " << sizeof(scores) / sizeof(scores[0]) << "\n";
+
+		// 형변환의 예외상황 2. & (주소) 연산자 사용
+		cout << "scores : " << scores << "\n"; // 시작 주소
+		cout << "scores + 1 : " << scores + 1 << "\n"; // +4 원소 단위로 int만큼
+		cout << "&scores : " << &scores << "\n"; // 시작 주소
+		cout << "&scores + 1 : " << &scores + 1 << "\n"; // +20 배열 전체 단위로 이동
 
 
 		system("pause"); // 포인터 주소값 확인을 위한 대기
