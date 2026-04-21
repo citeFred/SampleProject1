@@ -103,6 +103,17 @@
 			sPtr++; // +1 다음 원소로 이동
 		}
 
+		// Wild Pointer 위험
+		//int* wildPtr; // 초기화 안 함 -> 쓰레기 주소값이 들어갈 것임
+		//*wildPtr = 100; // CRASH 발생, 잘못된 메모리에 접근하고 있음
+		
+		// 포인터 변수 선언 시 안전한 초기화 예시문
+		int* wildPtr = nullptr; // 안전한 초기화를 위한 예약어 nullptr 사용
+		if (wildPtr != nullptr) { // wildPtr의 null 체크 조건문
+			*wildPtr = 100; //실행안됨
+		}
+		cout << "wildPtr : " << wildPtr << "\n"; // 0
+
 		system("pause"); // 포인터 주소값 확인을 위한 대기
 
 
