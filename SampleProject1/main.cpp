@@ -44,6 +44,9 @@
 		*ptr = 200; // 포인터를 역참조하여 hp값 쓰기및수정
 		cout << "hp변수의 새로운 값: " << hp << "\n"; // hp값이 변경된 것을 확인
 
+		//int* ptr2 = nullptr;
+		//cout << "*ptr2 값 : " << *ptr2 << "\n";
+
 		system("pause"); // 포인터 주소값 확인을 위한 대기
 
 
