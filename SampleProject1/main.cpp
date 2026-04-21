@@ -116,6 +116,16 @@
 
 		system("pause"); // 포인터 주소값 확인을 위한 대기
 
+		// 허상 포인터 예시
+		int* danglePtr = new int(100); // 동적 할당
+		cout << "삭제(delete) 전 : " << *danglePtr << "\n"; // 100
+		delete danglePtr; // 메모리 해제,삭제
+		//*danglePtr = 200; // 해제된 메모리에 할당하려 하고 있음. Runtime CRASH 발생
+		danglePtr = nullptr; // 안전처리
+
+		cout << "danglePtr : " << danglePtr << "\n"; // ??
+
+		system("pause"); // 포인터 주소값 확인을 위한 대기
 
 		// 1. 캐릭터 생성 UI
 		cout << "==========================================================================\n";
