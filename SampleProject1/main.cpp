@@ -49,6 +49,14 @@
 
 		system("pause"); // 포인터 주소값 확인을 위한 대기
 
+		cout << "sizeof(int) : " << sizeof(int) << "bytes \n";
+		cout << "sizeof(int*) : " << sizeof(int*) << "bytes \n";
+		cout << "sizeof(double*) : " << sizeof(double*) << "bytes \n";
+		cout << "sizeof(char*) : " << sizeof(char*) << "bytes \n";
+
+
+		system("pause"); // 포인터 주소값 확인을 위한 대기
+
 
 		// 1. 캐릭터 생성 UI
 		cout << "==========================================================================\n";
