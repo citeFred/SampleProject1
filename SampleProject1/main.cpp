@@ -30,6 +30,10 @@
 		int poisonResist = 0;
 
 		bool isHardcore = true;
+
+		// 인벤토리 (0 = 빈칸, 1= Gold, 2=Healing Potion, 3=Weapon, 4=Armor)
+		int gameInventory[5] = { 0, 0, 0, 0, 0 };
+
 		/** 
 		* 문서화를 위한 주석
 		*/
@@ -302,18 +306,32 @@
 
 			cout << "\n[System] Looting Items...\n";
 
+			int* invPtr = gameInventory;			// invPtr -> gameInventory 시작주소 [0]
+
+			// 포인터로 인벤토리에 랜덤 숫자 저장
 			for (int i = 1; i <= 3; i++) {
-				int lootRoll = rand() % 4;
-				string itemName;
-
-				if (lootRoll == 0) itemName = "Gold";
-				else if (lootRoll == 1) itemName = "Healing Potion";
-				else if (lootRoll == 2) itemName = "Weapon";
-				else itemName = "Armor";
-
-				cout << " > " << i << ". Get [" << itemName << "]\n";
+				*invPtr = rand() % 4 + 1;			// 역참조로 현재 칸에 아이템 코드를 저장하고자 함
+				invPtr++;
 			}
-			cout << "--------------------------------------------------\n";
+
+			// 포인터 순회로 인벤토리 출력(5칸)
+			invPtr = gameInventory;		// invPtr 처음으로 리셋
+			int slot = 0;
+
+			cout << "==================================================\n";
+			cout << "||" << left << setw(46) << "          INVENTORY" << "||\n";
+			cout << "==================================================\n";
+			while (invPtr < gameInventory + 5) {
+				string itemName;
+				if (*invPtr == 1) itemName = "Gold";
+				else if (*invPtr == 2) itemName = "Healing Potion";
+				else if (*invPtr == 3) itemName = "Weapon";
+				else if (*invPtr == 4) itemName = "Armor";
+				else itemName = "None";
+				cout << " > Slot " << slot << " < [" << itemName<<"]\n";
+				invPtr++;
+				slot++;
+			}
 		}
 
 		cout << "\n";
