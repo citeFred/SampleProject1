@@ -11,6 +11,11 @@
 		cout << "크리티컬 예상 데미지:" << attackDamage << "\n";
 	}
 
+	// Call By Address: 주소 전달 -> 원본 직접 수정 가능
+	void LevelUp(int* level) {
+		(*level)++; // 역참조로 level 원본 직접 증가
+	}
+
 	int main()
 	{
 		char userName[50];
@@ -44,6 +49,13 @@
 		cout << "원본 attackDamage: " << attackDamage << "\n";
 		PreviewCritical(attackDamage);
 		cout << "호출 이후 attackDamage: " << attackDamage << "\n";
+
+		system("pause");
+
+		// Call By Address: 주소전달 -> 원본 직접 수정
+		cout << "레벨업 전 level: " << level << "\n";
+		LevelUp(&level);
+		cout << "레벨업 후 level: " << level << "\n";
 
 		system("pause");
 
