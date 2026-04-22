@@ -16,6 +16,11 @@
 		(*level)++; // 역참조로 level 원본 직접 증가
 	}
 
+	// Call By Reference: 참조자 전달 -> * 없이 원본 직접 수정
+	void LevelUpRef(int& level) {
+		level++;
+	}
+
 	int main()
 	{
 		char userName[50];
@@ -60,11 +65,18 @@
 		system("pause");
 
 		// Call By Reference: 별칭(Alias) 선언 -> 원본과 같은 메모리
-		int& levelRef = level;	// level의 별칭 선언
-		levelRef++; //levelRef 수정 -> level이 수정될 것임
-		cout << "levelRef++ 후 원본 level: " << level << "\n";
-		cout << "levelRef++과 level이 동일한 값?: " << levelRef << "\n";
+		//int& level = level;	// level의 별칭 선언
+		//levelRef++; //levelRef 수정 -> level이 수정될 것임
+		//cout << "levelRef++ 후 원본 level: " << level << "\n";
+		//cout << "levelRef++과 level이 동일한 값?: " << levelRef << "\n";
 
+		// Call By Reference: & 없이 호출, * 없이 수정
+		cout << "levelUpRef() 호출 전 원본 level: " << level << "\n";
+		LevelUpRef(level); // & 없이 그냥 변수명
+		cout << "levelUpRef() 호출 후 원본 level: " << level << "\n";
+		system("pause");
+
+		
 		/* 
 		// 
 		cout << "hp변수의 값:  : " << hp << "\n";
