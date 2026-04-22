@@ -5,6 +5,34 @@
 #include <iomanip>
 	using namespace std;
 
+	// Call By Value: 복사본 전달 -> 원본은 변경 불가
+	void PreviewCritical(float attackDamage) {
+		attackDamage *= 2; // Parameter 복사본만 2배, 원본 변수는 그대로?
+		cout << "크리티컬 예상 데미지:" << attackDamage << "\n";
+	}
+
+	// Call By Reference: 예시) 참조자 절달 -> 실제 크리티컬 데미지 적용
+	void ApplyCriticalDamage(int& goblinHp, float attackDamage) {
+		int critDamage = attackDamage * 2; // 치명타는 2배 데미지 적용
+		goblinHp -= critDamage; // 원본 goblinHp를 직접 감소
+	}
+
+	// Call By Address: 주소 전달 -> 원본 직접 수정 가능
+	//void LevelUp(int* level) {
+		//(*level)++; // 역참조로 level 원본 직접 증가
+	//}
+
+	// Call By Reference: 참조자 전달 -> * 없이 원본 직접 수정
+	void LevelUpRef(int& level) {
+		level++;
+	}
+
+	// const 참조자: 복사 비용 절약 + 원본 수정 차단
+	void PrintLevel(const int& level) {
+		cout << "현재 레벨: " << level << "\n";
+		//level++; // 컴파일 오류발생, const라 원본의 수정이 불가함
+	}
+
 	int main()
 	{
 		char userName[50];
@@ -34,9 +62,35 @@
 		// 인벤토리 (0 = 빈칸, 1= Gold, 2=Healing Potion, 3=Weapon, 4=Armor)
 		int gameInventory[5] = { 0, 0, 0, 0, 0 };
 
-		/** 
-		* 문서화를 위한 주석
-		*/
+		// Call By Value: 복사본 전달 -> 원본의 불변 확인
+		//cout << "원본 attackDamage: " << attackDamage << "\n";
+		//PreviewCritical(attackDamage);
+		//cout << "호출 이후 attackDamage: " << attackDamage << "\n";
+
+		//system("pause");
+
+		// Call By Address: 주소전달 -> 원본 직접 수정
+		//cout << "레벨업 전 level: " << level << "\n";
+		//LevelUp(&level);
+		//cout << "레벨업 후 level: " << level << "\n";
+
+		//system("pause");
+
+		// Call By Reference: 별칭(Alias) 선언 -> 원본과 같은 메모리
+		//int& level = level;	// level의 별칭 선언
+		//levelRef++; //levelRef 수정 -> level이 수정될 것임
+		//cout << "levelRef++ 후 원본 level: " << level << "\n";
+		//cout << "levelRef++과 level이 동일한 값?: " << levelRef << "\n";
+
+		// Call By Reference: & 없이 호출, * 없이 수정
+		//cout << "levelUpRef() 호출 전 원본 level: " << level << "\n";
+		//LevelUpRef(level); // & 없이 그냥 변수명
+		//cout << "levelUpRef() 호출 후 원본 level: " << level << "\n";
+		//system("pause");
+
+		// const 참조자: 읽기 전용, 수정 불가
+		//PrintLevel(level);
+		//system("pause");
 
 		/* 
 		// 
@@ -268,13 +322,23 @@
 			cout << "==================================================\n";
 			cout << combatMessage << "\n";
 			cout << "--------------------------------------------------\n";
-			cout << ">> 1. Attack\n>> Select Action : ";
+			cout << ">> 1. Attack\n>> 2. Bash Attack\n Select Action : ";
 			cin >> action;
 
 			// 행동 처리 및 결과 메시지 갱신
 			if (action == 1) {
 				goblinHp -= attackDamage;
 				combatMessage = "=> You attacked the Goblin! (Dmg: " + to_string((int)attackDamage) + ")";
+
+				if (goblinHp > 0) {
+					hp -= 30;
+					combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
+				}
+			}
+			else if (action == 2) {
+				PreviewCritical(attackDamage);
+				ApplyCriticalDamage(goblinHp, attackDamage);
+				combatMessage = "=> Bash Hit! (Dmg: " + to_string((int)attackDamage * 2 ) + ")";
 
 				if (goblinHp > 0) {
 					hp -= 30;
@@ -332,6 +396,10 @@
 				invPtr++;
 				slot++;
 			}
+
+			// 레벨업
+			LevelUpRef(level);
+			PrintLevel(level);
 		}
 
 		cout << "\n";
