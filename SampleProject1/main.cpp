@@ -21,6 +21,12 @@
 		level++;
 	}
 
+	// const 참조자: 복사 비용 절약 + 원본 수정 차단
+	void PrintLevel(const int& level) {
+		cout << "현재 레벨: " << level << "\n";
+		//level++; // 컴파일 오류발생, const라 원본의 수정이 불가함
+	}
+
 	int main()
 	{
 		char userName[50];
@@ -76,7 +82,10 @@
 		cout << "levelUpRef() 호출 후 원본 level: " << level << "\n";
 		system("pause");
 
-		
+		// const 참조자: 읽기 전용, 수정 불가
+		PrintLevel(level);
+		system("pause");
+
 		/* 
 		// 
 		cout << "hp변수의 값:  : " << hp << "\n";
