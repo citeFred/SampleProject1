@@ -32,6 +32,33 @@
 		cout << "현재 레벨: " << level << "\n";
 		//level++; // 컴파일 오류발생, const라 원본의 수정이 불가함
 	}
+	
+	// Monster 클래스 
+	class Monster
+	{
+	private:
+		int hp, maxHp;
+		int attackDamage;
+		
+	public:
+		Monster(int initHp, int atk) : hp(initHp), maxHp(initHp), attackDamage(atk)
+		{
+			cout << "[몬스터 등장!] HP :" << hp << " / ATK: " << attackDamage << "\n";
+		}
+		~Monster()
+		{
+			cout << "[몬스터 소멸!]\n"; // 소멸자 확인용 로그
+		}
+		int GetHp()	const { return hp; }
+		int GetMaxHp() const { return maxHp; }
+		bool isAlive() const { return hp > 0; }
+		void TakeDamage(int damage) // 몬스터가 피해를 받음
+		{
+			hp -= damage;
+			if (hp < 0) hp = 0; // 음수 방지
+		}
+		int Attack() const { return attackDamage; } // 몬스터가 플레이어를 공격
+	};
 
 	int main()
 	{
@@ -62,133 +89,6 @@
 		// 인벤토리 (0 = 빈칸, 1= Gold, 2=Healing Potion, 3=Weapon, 4=Armor)
 		int gameInventory[5] = { 0, 0, 0, 0, 0 };
 
-		// Call By Value: 복사본 전달 -> 원본의 불변 확인
-		//cout << "원본 attackDamage: " << attackDamage << "\n";
-		//PreviewCritical(attackDamage);
-		//cout << "호출 이후 attackDamage: " << attackDamage << "\n";
-
-		//system("pause");
-
-		// Call By Address: 주소전달 -> 원본 직접 수정
-		//cout << "레벨업 전 level: " << level << "\n";
-		//LevelUp(&level);
-		//cout << "레벨업 후 level: " << level << "\n";
-
-		//system("pause");
-
-		// Call By Reference: 별칭(Alias) 선언 -> 원본과 같은 메모리
-		//int& level = level;	// level의 별칭 선언
-		//levelRef++; //levelRef 수정 -> level이 수정될 것임
-		//cout << "levelRef++ 후 원본 level: " << level << "\n";
-		//cout << "levelRef++과 level이 동일한 값?: " << levelRef << "\n";
-
-		// Call By Reference: & 없이 호출, * 없이 수정
-		//cout << "levelUpRef() 호출 전 원본 level: " << level << "\n";
-		//LevelUpRef(level); // & 없이 그냥 변수명
-		//cout << "levelUpRef() 호출 후 원본 level: " << level << "\n";
-		//system("pause");
-
-		// const 참조자: 읽기 전용, 수정 불가
-		//PrintLevel(level);
-		//system("pause");
-
-		/* 
-		// 
-		cout << "hp변수의 값:  : " << hp << "\n";
-		cout << "hp변수의 주소값: " << &hp << "\n"; // 변수의 주소값 출력 & 앰퍼샌드 연산자 사용
-		system("pause"); // 변수 값과 주소값 확인을 위한 대기
-
-		// "*" 역참조 연산자
-		int* ptr = &hp;
-		cout << "ptr == &hp: " << ptr << "\n"; 
-		cout << "*ptr 값 : " << *ptr << "\n"; // 포인터를 역참조하여 hp값 읽기
-
-		*ptr = 200; // 포인터를 역참조하여 hp값 쓰기및수정
-		cout << "hp변수의 새로운 값: " << hp << "\n"; // hp값이 변경된 것을 확인
-
-		//int* ptr2 = nullptr;
-		//cout << "*ptr2 값 : " << *ptr2 << "\n";
-
-		system("pause"); // 포인터 주소값 확인을 위한 대기
-
-		cout << "sizeof(int) : " << sizeof(int) << "bytes \n";
-		cout << "sizeof(int*) : " << sizeof(int*) << "bytes \n";
-		cout << "sizeof(double*) : " << sizeof(double*) << "bytes \n";
-		cout << "sizeof(char*) : " << sizeof(char*) << "bytes \n";
-
-
-		system("pause"); // 포인터 주소값 확인을 위한 대기
-		
-		// 포인터 연산 (+1 = 자료형 메모리 크기만큼 이동)
-
-		cout << "ptr : " << ptr << "\n";
-		cout << "ptr+1 : " << ptr + 1  << "\n";
-		cout << "ptr+2 : " << ptr + 2  << "\n";
-
-
-		system("pause"); // 포인터 주소값 확인을 위한 대기
-
-		// 배열의 메모리 구조 확인
-		int scores[5] = { 85, 92, 78, 95, 88 }; 
-		cout << "&scores[0] : " << &scores[0] << "\n";
-		cout << "&scores[1] : " << &scores[1] << "\n";
-		cout << "&scores[2] : " << &scores[2] << "\n";
-		cout << "&scores[3] : " << &scores[3] << "\n";
-		cout << "&scores[4] : " << &scores[4] << "\n";
-
-
-		system("pause"); // 포인터 주소값 확인을 위한 대기
-
-		// 배열 이름이 시작 주소로 형변환 (Pointer Decay)
-		cout << "scores : " << scores << "\n"; // 배열 이름
-		cout << "&scores[0] : " << &scores[0] << "\n"; // 첫 원소 주소
-		cout << "scores[2] : " << scores[2] << "\n"; // 인덱스로 접근
-		cout << "*(scores+2) : " << *(scores+2) << "\n"; // 포인터 연산
-
-		// 형변환의 예외상황 1. sizeof() 사용
-		cout << "sizeof(scores) : " << sizeof(scores) << "\n";
-		cout << "sizeof(scores[0]) : " << sizeof(scores[0]) << "\n";
-		cout << "scores 원소개수 : " << sizeof(scores) / sizeof(scores[0]) << "\n";
-
-		// 형변환의 예외상황 2. & (주소) 연산자 사용
-		cout << "scores : " << scores << "\n"; // 시작 주소
-		cout << "scores + 1 : " << scores + 1 << "\n"; // +4 원소 단위로 int만큼
-		cout << "&scores : " << &scores << "\n"; // 시작 주소
-		cout << "&scores + 1 : " << &scores + 1 << "\n"; // +20 배열 전체 단위로 이동
-
-		system("pause"); // 포인터 주소값 확인을 위한 대기
-
-		// for 반복문을 통한 배열 순환
-		int* sPtr = scores;
-		for (int i = 0; i < 5; i++) {
-			cout << "주소 : " << sPtr << "/ 값 : " << *sPtr << "\n";
-			sPtr++; // +1 다음 원소로 이동
-		}
-
-		// Wild Pointer 위험
-		//int* wildPtr; // 초기화 안 함 -> 쓰레기 주소값이 들어갈 것임
-		//*wildPtr = 100; // CRASH 발생, 잘못된 메모리에 접근하고 있음
-		
-		// 포인터 변수 선언 시 안전한 초기화 예시문
-		int* wildPtr = nullptr; // 안전한 초기화를 위한 예약어 nullptr 사용
-		if (wildPtr != nullptr) { // wildPtr의 null 체크 조건문
-			*wildPtr = 100; //실행안됨
-		}
-		cout << "wildPtr : " << wildPtr << "\n"; // 0
-
-		system("pause"); // 포인터 주소값 확인을 위한 대기
-
-		// 허상 포인터 예시
-		int* danglePtr = new int(100); // 동적 할당
-		cout << "삭제(delete) 전 : " << *danglePtr << "\n"; // 100
-		delete danglePtr; // 메모리 해제,삭제
-		//*danglePtr = 200; // 해제된 메모리에 할당하려 하고 있음. Runtime CRASH 발생
-		danglePtr = nullptr; // 안전처리
-
-		cout << "danglePtr : " << danglePtr << "\n"; // ??
-
-		system("pause"); // 포인터 주소값 확인을 위한 대기
-		*/
 		// 1. 캐릭터 생성 UI
 		cout << "==========================================================================\n";
 		cout << "      :::::::::  :::::::::::     :::     :::::::::  :::        :::::::: \n";
@@ -292,8 +192,9 @@
 		system("cls");   // 화면 지우기
 
 		// 3. 전투 시스템 UI
-		int maxGoblinHp = 30;
-		int goblinHp = maxGoblinHp;
+		// 생성자 호출
+		Monster goblin(30, 10);
+		
 		int maxPlayerHp = hp;
 		int action;
 		string combatMessage = "[System] Battle Started!"; // 전투 메시지 저장용 변수
@@ -305,11 +206,11 @@
 		system("pause"); // 조우 메시지 확인용 1회 대기
 		system("cls");
 
-		while (goblinHp > 0 && hp > 0) {
-			int dGoblinHp = (goblinHp < 0) ? 0 : goblinHp;
+		while (goblin.isAlive() && hp > 0) {
+			int dGoblinHp = goblin.GetHp();
 			int dPlayerHp = (hp < 0) ? 0 : hp;
 
-			int gBarCnt = (dGoblinHp * 20) / maxGoblinHp;
+			int gBarCnt = (dGoblinHp * 20) / goblin.GetMaxHp();
 			int pBarCnt = (dPlayerHp * 20) / maxPlayerHp;
 
 			string gBar = string(gBarCnt, '=') + string(20 - gBarCnt, '-');
@@ -327,28 +228,28 @@
 
 			// 행동 처리 및 결과 메시지 갱신
 			if (action == 1) {
-				goblinHp -= attackDamage;
+				goblin.TakeDamage((int)attackDamage); // 객체 스스로가 데미지를 처리하고 있음
 				combatMessage = "=> You attacked the Goblin! (Dmg: " + to_string((int)attackDamage) + ")";
 
-				if (goblinHp > 0) {
-					hp -= 30;
+				if (goblin.isAlive()) {
+					hp -= goblin.Attack();
 					combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
 				}
 			}
 			else if (action == 2) {
 				PreviewCritical(attackDamage);
-				ApplyCriticalDamage(goblinHp, attackDamage);
+				goblin.TakeDamage((int)attackDamage * 2); // 2배 데미지 받음
 				combatMessage = "=> Bash Hit! (Dmg: " + to_string((int)attackDamage * 2 ) + ")";
 
-				if (goblinHp > 0) {
-					hp -= 30;
+				if (goblin.isAlive()) {
+					hp -= goblin.Attack();
 					combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
 				}
 			}
 			else {
 				cin.clear();
 				cin.ignore(100, '\n');
-				hp -= 30;
+				hp -= goblin.Attack();
 				combatMessage = "=> Invalid action! You stumbled.\n=> The Goblin attacked you! (Dmg: 30)";
 			}
 
