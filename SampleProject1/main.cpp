@@ -60,34 +60,101 @@
 		int Attack() const { return attackDamage; } // 몬스터가 플레이어를 공격
 	};
 
+	// Player 클래스
+	class Player
+	{
+	private:
+		// 기본 정보
+		string name;
+		string characterClass;
+		bool isHardcore;
+		
+		// 기본 능력치
+		int strength, dexterity, vitality, energy;
+		
+		// 파생 능력치
+		int level;
+		int hp, maxHp;
+		int mp, maxMp;
+		float attackDamage;
+		float attackSpeed;
+		double movingSpeed;
+		
+		// 저항 능력치
+		int fireResist, coldResist, lightningResist, poisonResist;
+		
+		// 인벤토리
+		int inventory[5];
+		
+	public:
+		// 생성자
+		Player(const string& name, const string& characterClass, bool isHardcore) // 외부입력 값 세팅 초기화
+			: name(name), characterClass(characterClass), isHardcore(isHardcore), // 단순 값 세팅 초기화
+		strength(50), dexterity(50), vitality(50), energy(50),
+		level(1),
+		fireResist(0), coldResist(0), lightningResist(0), poisonResist(0)
+		{
+			maxHp = vitality * 2; // 계산이 필요한 값 세팅 초기화
+			hp = maxHp;
+			maxMp = (int)energy * 1.5f;
+			mp = maxMp;
+			attackDamage = strength * 0.2f;
+			attackSpeed = dexterity / 10.0f;
+			movingSpeed = dexterity / 30.0f;
+			for (int i = 0; i < 5; ++i) inventory[i] = 0;
+		}
+		
+		// Getters
+		string GetName() const { return name; }
+		string GetCharacterClass() const { return characterClass; }
+		bool GetIsHardcore() const { return isHardcore; }
+		int GetStrength() const { return strength; }
+		int GetDexterity() const { return dexterity; }
+		int GetVitality() const { return vitality; }
+		int GetEnergy() const { return energy; }
+		int GetLevel() const { return level; }
+		int GetHp() const { return hp; }
+		int GetMaxHp() const { return maxHp; }
+		int GetMaxMp() const { return maxMp; }
+		int GetMp() const { return mp; }
+		int GetFireResist() const { return fireResist; }
+		int GetColdResist() const { return coldResist; }
+		int GetLightningResist() const { return lightningResist; }
+		int GetPoisonResist() const { return poisonResist; }
+		float GetAttackDamage() const { return attackDamage; }
+		float GetAttackSpeed() const { return attackSpeed; }
+		float GetMovingSpeed() const { return movingSpeed; }
+		int* GetInventory() { return inventory; }
+		
+		// 기능(함수)
+		bool isAlive() const { return hp > 0; }
+		void TakeDamage(int damage)
+		{
+			hp -= damage;
+			if (hp <= 0) hp = 0;
+		}
+		int Attack() const { return (int)attackDamage; }
+		int CriticalAttack() const { return (int)(attackDamage * 2); }
+		void LevelUp() { level++; }
+		void PreviewCritical() const
+		{
+			float preview = attackDamage * 2;
+			cout << "크리티컬 예상 데미지: " << preview << "\n";
+		}
+		
+		void PrintLevel() const
+		{
+			cout << "현재 레벨: " << level << "\n";
+		}
+	};
+
 	int main()
 	{
-		char userName[50];
+		string userName;
 		string charactorClass;
 		int classChoiceInput;
 		char hardcoreInput;
-
-		// 스탯 시스템
-		int strength = 50;
-		int dexterity = 50;
-		int vitality = 50;
-		int energy = 50;
-
-		int level = 1;
-		int hp = vitality * 2;
-		int mp = energy * 1.5;
-		float attackDamage = strength * 0.2f;
-		float attackSpeed = dexterity / 10.0f;
-		double movingSpeed = dexterity / 30.0;
-		int fireResist = 0;
-		int lightningResist = 0;
-		int coldResist = 0;
-		int poisonResist = 0;
-
 		bool isHardcore = true;
-
-		// 인벤토리 (0 = 빈칸, 1= Gold, 2=Healing Potion, 3=Weapon, 4=Armor)
-		int gameInventory[5] = { 0, 0, 0, 0, 0 };
 
 		// 1. 캐릭터 생성 UI
 		cout << "==========================================================================\n";
@@ -160,32 +227,35 @@
 		system("pause"); // 안내 메시지 확인을 위한 대기
 		system("cls");   // 화면 지우기
 
+		// Player 객체 생성 - 입력받은 값들로 초기화, 스탯은 내부에서 자동 계산됨
+		Player player(userName, charactorClass, hardcoreInput);
+		
 		// 2. 캐릭터 상태창 UI
 		string hcText = isHardcore ? "ON" : "OFF";
 
 		cout << "==================================================\n";
 		cout << "||" << left << setw(46) << "               CHARACTER STATUS" << "||\n";
 		cout << "==================================================\n";
-		cout << "|| " << left << setw(13) << "NAME" << " || " << left << setw(27) << userName << " ||\n";
-		cout << "|| " << left << setw(13) << "CLASS" << " || " << left << setw(27) << charactorClass << " ||\n";
-		cout << "|| " << left << setw(13) << "LEVEL" << " || " << left << setw(27) << level << " ||\n";
+		cout << "|| " << left << setw(13) << "NAME" << " || " << left << setw(27) << player.GetName() << " ||\n";
+		cout << "|| " << left << setw(13) << "CLASS" << " || " << left << setw(27) << player.GetCharacterClass() << " ||\n";
+		cout << "|| " << left << setw(13) << "LEVEL" << " || " << left << setw(27) << player.GetLevel() << " ||\n";
 		cout << "==================================================\n";
-		cout << "|| " << left << setw(13) << "HP" << " || " << left << setw(27) << hp << " ||\n";
-		cout << "|| " << left << setw(13) << "MP" << " || " << left << setw(27) << mp << " ||\n";
-		cout << "|| " << left << setw(13) << "DAMAGE" << " || " << left << setw(27) << attackDamage << " ||\n";
-		cout << "|| " << left << setw(13) << "ATTACK SPD" << " || " << left << setw(27) << attackSpeed << " ||\n";
-		cout << "|| " << left << setw(13) << "MOVING SPD" << " || " << left << setw(27) << movingSpeed << " ||\n";
+		cout << "|| " << left << setw(13) << "HP" << " || " << left << setw(27) << player.GetMaxHp() << " ||\n";
+		cout << "|| " << left << setw(13) << "MP" << " || " << left << setw(27) << player.GetMaxMp() << " ||\n";
+		cout << "|| " << left << setw(13) << "DAMAGE" << " || " << left << setw(27) << player.GetAttackDamage() << " ||\n";
+		cout << "|| " << left << setw(13) << "ATTACK SPD" << " || " << left << setw(27) << player.GetAttackSpeed() << " ||\n";
+		cout << "|| " << left << setw(13) << "MOVING SPD" << " || " << left << setw(27) << player.GetMovingSpeed() << " ||\n";
 		cout << "--------------------------------------------------\n";
-		cout << "|| " << left << setw(13) << "STRENGTH" << " || " << left << setw(27) << strength << " ||\n";
-		cout << "|| " << left << setw(13) << "DEXTERITY" << " || " << left << setw(27) << dexterity << " ||\n";
-		cout << "|| " << left << setw(13) << "VITALITY" << " || " << left << setw(27) << vitality << " ||\n";
-		cout << "|| " << left << setw(13) << "ENERGY" << " || " << left << setw(27) << energy << " ||\n";
+		cout << "|| " << left << setw(13) << "STRENGTH" << " || " << left << setw(27) << player.GetStrength() << " ||\n";
+		cout << "|| " << left << setw(13) << "DEXTERITY" << " || " << left << setw(27) << player.GetDexterity() << " ||\n";
+		cout << "|| " << left << setw(13) << "VITALITY" << " || " << left << setw(27) << player.GetVitality() << " ||\n";
+		cout << "|| " << left << setw(13) << "ENERGY" << " || " << left << setw(27) << player.GetEnergy() << " ||\n";
 		cout << "==================================================\n";
-		cout << "|| " << left << setw(13) << "HARDCORE" << " || " << left << setw(27) << hcText << " ||\n";
-		cout << "|| " << left << setw(13) << "FIRE RES" << " || " << left << setw(27) << fireResist << " ||\n";
-		cout << "|| " << left << setw(13) << "LIGHT RES" << " || " << left << setw(27) << lightningResist << " ||\n";
-		cout << "|| " << left << setw(13) << "COLD RES" << " || " << left << setw(27) << coldResist << " ||\n";
-		cout << "|| " << left << setw(13) << "POISON RES" << " || " << left << setw(27) << poisonResist << " ||\n";
+		cout << "|| " << left << setw(13) << "HARDCORE" << " || " << left << setw(27) << player.GetIsHardcore() << " ||\n";
+		cout << "|| " << left << setw(13) << "FIRE RES" << " || " << left << setw(27) << player.GetFireResist() << " ||\n";
+		cout << "|| " << left << setw(13) << "LIGHT RES" << " || " << left << setw(27) << player.GetLightningResist() << " ||\n";
+		cout << "|| " << left << setw(13) << "COLD RES" << " || " << left << setw(27) << player.GetColdResist() << " ||\n";
+		cout << "|| " << left << setw(13) << "POISON RES" << " || " << left << setw(27) << player.GetPoisonResist() << " ||\n";
 		cout << "==================================================\n\n";
 
 		system("pause"); // 상태창 확인 대기
@@ -195,7 +265,6 @@
 		// 생성자 호출
 		Monster goblin(30, 10);
 		
-		int maxPlayerHp = hp;
 		int action;
 		string combatMessage = "[System] Battle Started!"; // 전투 메시지 저장용 변수
 
@@ -206,12 +275,12 @@
 		system("pause"); // 조우 메시지 확인용 1회 대기
 		system("cls");
 
-		while (goblin.isAlive() && hp > 0) {
+		while (goblin.isAlive() && player.isAlive()) {
 			int dGoblinHp = goblin.GetHp();
-			int dPlayerHp = (hp < 0) ? 0 : hp;
+			int dPlayerHp = player.GetHp();
 
 			int gBarCnt = (dGoblinHp * 20) / goblin.GetMaxHp();
-			int pBarCnt = (dPlayerHp * 20) / maxPlayerHp;
+			int pBarCnt = (dPlayerHp * 20) / player.GetMaxHp();
 
 			string gBar = string(gBarCnt, '=') + string(20 - gBarCnt, '-');
 			string pBar = string(pBarCnt, '=') + string(20 - pBarCnt, '-');
@@ -228,28 +297,27 @@
 
 			// 행동 처리 및 결과 메시지 갱신
 			if (action == 1) {
-				goblin.TakeDamage((int)attackDamage); // 객체 스스로가 데미지를 처리하고 있음
-				combatMessage = "=> You attacked the Goblin! (Dmg: " + to_string((int)attackDamage) + ")";
+				goblin.TakeDamage(player.Attack()); // 객체 스스로가 데미지를 처리하고 있음
+				combatMessage = "=> You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
 
 				if (goblin.isAlive()) {
-					hp -= goblin.Attack();
+					player.TakeDamage(goblin.Attack());
 					combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
 				}
 			}
 			else if (action == 2) {
-				PreviewCritical(attackDamage);
-				goblin.TakeDamage((int)attackDamage * 2); // 2배 데미지 받음
-				combatMessage = "=> Bash Hit! (Dmg: " + to_string((int)attackDamage * 2 ) + ")";
+				goblin.TakeDamage(player.CriticalAttack()); // 2배 데미지 받음
+				combatMessage = "=> Bash Hit! (Dmg: " + to_string(player.CriticalAttack()) + ")";
 
 				if (goblin.isAlive()) {
-					hp -= goblin.Attack();
+					player.TakeDamage(goblin.Attack());
 					combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
 				}
 			}
 			else {
 				cin.clear();
 				cin.ignore(100, '\n');
-				hp -= goblin.Attack();
+				player.TakeDamage(goblin.Attack());
 				combatMessage = "=> Invalid action! You stumbled.\n=> The Goblin attacked you! (Dmg: 30)";
 			}
 
@@ -257,7 +325,7 @@
 			system("cls");
 		}
 		// 전투 종료 후 결과 판정
-		if (hp <= 0) {
+		if (!player.isAlive()) {
 			cout << "==================================================\n";
 			cout << "||" << left << setw(46) << "                 YOU DIED..." << "||\n";
 			cout << "==================================================\n";
@@ -271,7 +339,7 @@
 
 			cout << "\n[System] Looting Items...\n";
 
-			int* invPtr = gameInventory;			// invPtr -> gameInventory 시작주소 [0]
+			int* invPtr = player.GetInventory();			// invPtr -> gameInventory 시작주소 [0]
 
 			// 포인터로 인벤토리에 랜덤 숫자 저장
 			for (int i = 1; i <= 3; i++) {
@@ -280,13 +348,13 @@
 			}
 
 			// 포인터 순회로 인벤토리 출력(5칸)
-			invPtr = gameInventory;		// invPtr 처음으로 리셋
+			invPtr = player.GetInventory();		// invPtr 처음으로 리셋
 			int slot = 0;
 
 			cout << "==================================================\n";
 			cout << "||" << left << setw(46) << "          INVENTORY" << "||\n";
 			cout << "==================================================\n";
-			while (invPtr < gameInventory + 5) {
+			while (invPtr < player.GetInventory() + 5) {
 				string itemName;
 				if (*invPtr == 1) itemName = "Gold";
 				else if (*invPtr == 2) itemName = "Healing Potion";
@@ -299,8 +367,8 @@
 			}
 
 			// 레벨업
-			LevelUpRef(level);
-			PrintLevel(level);
+			player.LevelUp();
+			player.PrintLevel();
 		}
 
 		cout << "\n";
