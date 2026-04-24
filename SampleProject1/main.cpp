@@ -140,8 +140,9 @@ int main()
 		battle.Run();
 		
 		pendingExp = goblin.GetExpReward(); // 몬스터 객체 소멸 전 경험치 보상 저장
+		// 3items
 	}
-		
+
 	// 전투 종료 후 결과 판정
 	if (!player.isAlive()) {
 		cout << "==================================================\n";
@@ -152,37 +153,9 @@ int main()
 		cout << "==================================================\n";
 		cout << "||" << left << setw(46) << "          YOU DEFEATED THE GOBLIN!" << "||\n";
 		cout << "==================================================\n";
-
-		srand((unsigned int)time(NULL));
-
-		cout << "\n[System] Looting Items...\n";
-
-		int* invPtr = player.GetInventory();			// invPtr -> gameInventory 시작주소 [0]
-
-		// 포인터로 인벤토리에 랜덤 숫자 저장
-		for (int i = 1; i <= 3; i++) {
-			*invPtr = rand() % 4 + 1;			// 역참조로 현재 칸에 아이템 코드를 저장하고자 함
-			invPtr++;
-		}
-
-		// 포인터 순회로 인벤토리 출력(5칸)
-		invPtr = player.GetInventory();		// invPtr 처음으로 리셋
-		int slot = 0;
-
-		cout << "==================================================\n";
-		cout << "||" << left << setw(46) << "          INVENTORY" << "||\n";
-		cout << "==================================================\n";
-		while (invPtr < player.GetInventory() + 5) {
-			string itemName;
-			if (*invPtr == 1) itemName = "Gold";
-			else if (*invPtr == 2) itemName = "Healing Potion";
-			else if (*invPtr == 3) itemName = "Weapon";
-			else if (*invPtr == 4) itemName = "Armor";
-			else itemName = "None";
-			cout << " > Slot " << slot << " < [" << itemName<<"]\n";
-			invPtr++;
-			slot++;
-		}
+		
+		// 아이템 루팅
+		player.Loot();
 
 		// 레벨업
 		player.GainExp(pendingExp);
