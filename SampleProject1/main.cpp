@@ -1,9 +1,8 @@
 #include <iostream>
 #include <string>
 #include <cstdlib> 
-#include <ctime>   
 #include <iomanip>
-
+#include <vector>
 #include "Battle.h"
 #include "Monster.h"
 #include "Player.h"
@@ -124,44 +123,49 @@ int main()
 
 	// 3. 전투 시스템 UI
 	int pendingExp = 0;
+	vector<Monster> monsters = {
+		Monster("Goblin", 50, 0 ,15 ,0 ,50),
+		Monster("Skeleton", 60, 0 ,20 ,0 ,50),
+		Monster("Wraith", 50, 0 ,25 ,0 ,50),
+		Monster("Ghoul", 70, 0 ,35 ,0 ,120),
+		Monster("Andariel", 200, 0 ,150 ,0 ,500),
+	};
+	
+	for (Monster& monster : monsters)
 	{
-		// 생성자 호출
-		Monster goblin(50, 0, 15, 0, 50);
+		if (!player.isAlive()) break;
 		
 		cout << "==================================================\n";
-		cout << "||" << left << setw(46) << "           A WILD GOBLIN APPEARED!" << "||\n";
+		cout << "||" << left << setw(46) << "           A " + monster.GetName() + "APPEARED!" << "||\n";
 		cout << "==================================================\n\n";
 
 		system("pause"); // 조우 메시지 확인용 1회 대기
 		system("cls");
 
 		// 전투기능 클래스 구현 이후 전투 생성과 실행
-		Battle battle(player, goblin);
+		Battle battle(player, monster);
 		battle.Run();
 		
-		pendingExp = goblin.GetExpReward(); // 몬스터 객체 소멸 전 경험치 보상 저장
-		// 3items
-	}
-
-	// 전투 종료 후 결과 판정
-	if (!player.isAlive()) {
-		cout << "==================================================\n";
-		cout << "||" << left << setw(46) << "                 YOU DIED..." << "||\n";
-		cout << "==================================================\n";
-	}
-	else {
-		cout << "==================================================\n";
-		cout << "||" << left << setw(46) << "          YOU DEFEATED THE GOBLIN!" << "||\n";
-		cout << "==================================================\n";
+		// 전투 종료 후 결과 판정
+		if (!player.isAlive()) {
+			cout << "==================================================\n";
+			cout << "||" << left << setw(46) << "                 YOU DIED..." << "||\n";
+			cout << "==================================================\n";
+		}
+		else {
+			cout << "==================================================\n";
+			cout << "||" << left << setw(46) << "          YOU DEFEATED THE " + monster.GetName() + "!" << "||\n";
+			cout << "==================================================\n";
 		
-		// 아이템 루팅
-		player.Loot();
+			// 아이템 루팅
+			player.Loot();
 
-		// 레벨업
-		player.GainExp(pendingExp);
-		player.PrintLevel();
+			// 레벨업
+			player.GainExp(pendingExp);
+			player.PrintLevel();
+		}
 	}
-
+	
 	cout << "\n";
 	system("pause"); // 프로그램 종료 전 결과창 유지
 	return 0;
