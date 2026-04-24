@@ -121,68 +121,73 @@ int main()
 	system("cls");   // 화면 지우기
 
 	// 3. 전투 시스템 UI
-	// 생성자 호출
-	Monster goblin(30, 10);
+	int pendingExp = 0;
+	{
+		// 생성자 호출
+		Monster goblin(50, 0, 15, 0, 50);
 	
-	int action;
-	string combatMessage = "[System] Battle Started!"; // 전투 메시지 저장용 변수
+		int action;
+		string combatMessage = "[System] Battle Started!"; // 전투 메시지 저장용 변수
 
-	cout << "==================================================\n";
-	cout << "||" << left << setw(46) << "           A WILD GOBLIN APPEARED!" << "||\n";
-	cout << "==================================================\n\n";
-
-	system("pause"); // 조우 메시지 확인용 1회 대기
-	system("cls");
-
-	while (goblin.isAlive() && player.isAlive()) {
-		int dGoblinHp = goblin.GetHp();
-		int dPlayerHp = player.GetHp();
-
-		int gBarCnt = (dGoblinHp * 20) / goblin.GetMaxHp();
-		int pBarCnt = (dPlayerHp * 20) / player.GetMaxHp();
-
-		string gBar = string(gBarCnt, '=') + string(20 - gBarCnt, '-');
-		string pBar = string(pBarCnt, '=') + string(20 - pBarCnt, '-');
-
-		// 체력 게이지와 이전 턴의 결과를 함께 출력
 		cout << "==================================================\n";
-		cout << "|| GOBLIN [" << gBar << "] " << left << setw(12) << dGoblinHp << "||\n";
-		cout << "|| PLAYER [" << pBar << "] " << left << setw(12) << dPlayerHp << "||\n";
-		cout << "==================================================\n";
-		cout << combatMessage << "\n";
-		cout << "--------------------------------------------------\n";
-		cout << ">> 1. Attack\n>> 2. Bash Attack\n Select Action : ";
-		cin >> action;
+		cout << "||" << left << setw(46) << "           A WILD GOBLIN APPEARED!" << "||\n";
+		cout << "==================================================\n\n";
 
-		// 행동 처리 및 결과 메시지 갱신
-		if (action == 1) {
-			goblin.TakeDamage(player.Attack()); // 객체 스스로가 데미지를 처리하고 있음
-			combatMessage = "=> You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
-
-			if (goblin.isAlive()) {
-				player.TakeDamage(goblin.Attack());
-				combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
-			}
-		}
-		else if (action == 2) {
-			goblin.TakeDamage(player.CriticalAttack()); // 2배 데미지 받음
-			combatMessage = "=> Bash Hit! (Dmg: " + to_string(player.CriticalAttack()) + ")";
-
-			if (goblin.isAlive()) {
-				player.TakeDamage(goblin.Attack());
-				combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
-			}
-		}
-		else {
-			cin.clear();
-			cin.ignore(100, '\n');
-			player.TakeDamage(goblin.Attack());
-			combatMessage = "=> Invalid action! You stumbled.\n=> The Goblin attacked you! (Dmg: 30)";
-		}
-
-		// 대기 없이 즉시 화면을 지우고 루프 처음으로 돌아가 변경된 체력바 출력
+		system("pause"); // 조우 메시지 확인용 1회 대기
 		system("cls");
+
+		while (goblin.isAlive() && player.isAlive()) {
+			int dGoblinHp = goblin.GetHp();
+			int dPlayerHp = player.GetHp();
+
+			int gBarCnt = (dGoblinHp * 20) / goblin.GetMaxHp();
+			int pBarCnt = (dPlayerHp * 20) / player.GetMaxHp();
+
+			string gBar = string(gBarCnt, '=') + string(20 - gBarCnt, '-');
+			string pBar = string(pBarCnt, '=') + string(20 - pBarCnt, '-');
+
+			// 체력 게이지와 이전 턴의 결과를 함께 출력
+			cout << "==================================================\n";
+			cout << "|| GOBLIN [" << gBar << "] " << left << setw(12) << dGoblinHp << "||\n";
+			cout << "|| PLAYER [" << pBar << "] " << left << setw(12) << dPlayerHp << "||\n";
+			cout << "==================================================\n";
+			cout << combatMessage << "\n";
+			cout << "--------------------------------------------------\n";
+			cout << ">> 1. Attack\n>> 2. Bash Attack\n Select Action : ";
+			cin >> action;
+
+			// 행동 처리 및 결과 메시지 갱신
+			if (action == 1) {
+				goblin.TakeDamage(player.Attack()); // 객체 스스로가 데미지를 처리하고 있음
+				combatMessage = "=> You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
+
+				if (goblin.isAlive()) {
+					player.TakeDamage(goblin.Attack());
+					combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
+				}
+			}
+			else if (action == 2) {
+				goblin.TakeDamage(player.CriticalAttack()); // 2배 데미지 받음
+				combatMessage = "=> Bash Hit! (Dmg: " + to_string(player.CriticalAttack()) + ")";
+
+				if (goblin.isAlive()) {
+					player.TakeDamage(goblin.Attack());
+					combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
+				}
+			}
+			else {
+				cin.clear();
+				cin.ignore(100, '\n');
+				player.TakeDamage(goblin.Attack());
+				combatMessage = "=> Invalid action! You stumbled.\n=> The Goblin attacked you! (Dmg: 30)";
+			}
+
+			// 대기 없이 즉시 화면을 지우고 루프 처음으로 돌아가 변경된 체력바 출력
+			system("cls");
+		}
+		pendingExp = goblin.GetExpReward(); // 몬스터 객체 소멸 전 경험치 보상 저장
 	}
+		
 	// 전투 종료 후 결과 판정
 	if (!player.isAlive()) {
 		cout << "==================================================\n";
@@ -226,7 +231,7 @@ int main()
 		}
 
 		// 레벨업
-		player.LevelUp();
+		player.GainExp(pendingExp);
 		player.PrintLevel();
 	}
 

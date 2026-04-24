@@ -4,10 +4,9 @@
 
 Player::Player(const string& name, const string& characterClass, bool isHardcore)
     // 외부입력 값 세팅 초기화
-    : name(name), characterClass(characterClass), isHardcore(isHardcore), // 단순 값 세팅 초기화
-    strength(50), dexterity(50), vitality(50), energy(50),
-    level(1),
-    fireResist(0), coldResist(0), lightningResist(0), poisonResist(0)
+    : Character(50, 50, 50, 50, 1),
+    name(name), characterClass(characterClass), isHardcore(isHardcore),
+    exp(0), expToNextLevel(100) // 단순 값 세팅 초기화
 {
     maxHp = vitality * 2; // 계산이 필요한 값 세팅 초기화
     hp = maxHp;
@@ -17,12 +16,6 @@ Player::Player(const string& name, const string& characterClass, bool isHardcore
     attackSpeed = dexterity / 10.0f;
     movingSpeed = dexterity / 30.0f;
     for (int i = 0; i < 5; ++i) inventory[i] = 0;
-}
-
-void Player::TakeDamage(int damage)
-{
-    hp -= damage;
-    if (hp <= 0) hp = 0;
 }
 
 void Player::LevelUp()
@@ -46,7 +39,14 @@ int Player::CriticalAttack() const
     return (int)(attackDamage * 2);
 }
 
-int Player::Attack() const
+void Player::GainExp(int amount)
 {
-    return (int)attackDamage; 
+    exp += amount;
+    if (exp >= expToNextLevel)
+    {
+        exp -= expToNextLevel;
+        level++;
+        expToNextLevel = level * 100;
+        cout << "[레벨 업!] Level: " << level << "\n";
+    }
 }
