@@ -37,7 +37,8 @@ bool Battle::Run()
 
             if (monster.isAlive()) {
                 player.TakeDamage(monster.Attack());
-                combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
+                combatMessage += "\n=>" + monster.GetAttackMessage() + " The " 
+                + monster.GetName() + " attacked you! (Dmg: " + to_string(monster.Attack()) + ")";
             }
         }
         else if (action == 2) {
@@ -46,7 +47,8 @@ bool Battle::Run()
 
             if (monster.isAlive()) {
                 player.TakeDamage(monster.Attack());
-                combatMessage += "\n=> The Goblin attacked you! (Dmg: 30)";
+                combatMessage += "\n=>" + monster.GetAttackMessage() + " The " 
+                + monster.GetName() + " attacked you! (Dmg: " + to_string(monster.Attack()) + ")";
             }
         }
         else {

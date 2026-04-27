@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <vector>
 #include "Battle.h"
+#include "FireGoblin.h"
 #include "Monster.h"
 #include "Player.h"
 using namespace std;
@@ -123,27 +124,28 @@ int main()
 
 	// 3. 전투 시스템 UI
 	int pendingExp = 0;
-	vector<Monster> monsters = {
-		Monster("Goblin", 50, 0 ,15 ,0 ,50),
-		Monster("Skeleton", 60, 0 ,20 ,0 ,50),
-		Monster("Wraith", 50, 0 ,25 ,0 ,50),
-		Monster("Ghoul", 70, 0 ,35 ,0 ,120),
-		Monster("Andariel", 200, 0 ,150 ,0 ,500),
+	vector<Monster*> monsters = {
+		new Monster("Goblin", 50, 0 ,15 ,0 ,50),
+		new FireGoblin("FireGoblin", 50, 0 ,15 ,0 ,50),
+		new Monster("Skeleton", 60, 0 ,20 ,0 ,50),
+		new Monster("Wraith", 50, 0 ,25 ,0 ,50),
+		new Monster("Ghoul", 70, 0 ,35 ,0 ,120),
+		new Monster("Andariel", 200, 0 ,150 ,0 ,500),
 	};
 	
-	for (Monster& monster : monsters)
+	for (Monster* monster : monsters)
 	{
 		if (!player.isAlive()) break;
 		
 		cout << "==================================================\n";
-		cout << "||" << left << setw(46) << "           A " + monster.GetName() + "APPEARED!" << "||\n";
+		cout << "||" << left << setw(46) << "           A " + monster->GetName() + "APPEARED!" << "||\n";
 		cout << "==================================================\n\n";
 
 		system("pause"); // 조우 메시지 확인용 1회 대기
 		system("cls");
 
 		// 전투기능 클래스 구현 이후 전투 생성과 실행
-		Battle battle(player, monster);
+		Battle battle(player, *monster);
 		battle.Run();
 		
 		// 전투 종료 후 결과 판정
@@ -154,7 +156,7 @@ int main()
 		}
 		else {
 			cout << "==================================================\n";
-			cout << "||" << left << setw(46) << "          YOU DEFEATED THE " + monster.GetName() + "!" << "||\n";
+			cout << "||" << left << setw(46) << "          YOU DEFEATED THE " + monster->GetName() + "!" << "||\n";
 			cout << "==================================================\n";
 		
 			// 아이템 루팅
@@ -164,6 +166,12 @@ int main()
 			player.GainExp(pendingExp);
 			player.PrintLevel();
 		}
+	}
+	
+	// new로 생성한 몬스터 메모리 해제
+	for (Monster* monster : monsters)
+	{
+		delete monster;
 	}
 	
 	cout << "\n";

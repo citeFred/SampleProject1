@@ -14,4 +14,6 @@ public:
     
     string GetName() const { return name; }
     int GetExpReward() const { return expReward; }
+    
+    virtual string GetAttackMessage() const { return ""; }
 };
