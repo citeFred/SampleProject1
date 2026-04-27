@@ -3,10 +3,13 @@
 #include <cstdlib> 
 #include <iomanip>
 #include <vector>
+
+#include "Barbarian.h"
 #include "Battle.h"
 #include "FireGoblin.h"
 #include "Monster.h"
 #include "Player.h"
+#include "Sorceress.h"
 using namespace std;
 
 int main()
@@ -88,8 +91,12 @@ int main()
 	system("pause"); // 안내 메시지 확인을 위한 대기
 	system("cls");   // 화면 지우기
 
-	// Player 객체 생성 - 입력받은 값들로 초기화, 스탯은 내부에서 자동 계산됨
-	Player player(userName, charactorClass, hardcoreInput);
+	// Player 직업에따라 자식 클래스를 생성
+	Player* playerPtr = nullptr;
+	if (classChoiceInput == 3) playerPtr = new Barbarian(userName, isHardcore);
+	else if (classChoiceInput == 7) playerPtr = new Sorceress(userName, isHardcore);
+	else playerPtr = new Player(userName, charactorClass, isHardcore);
+	Player& player = *playerPtr;
 	
 	// 2. 캐릭터 상태창 UI
 	string hcText = isHardcore ? "ON" : "OFF";
@@ -173,6 +180,7 @@ int main()
 	{
 		delete monster;
 	}
+	delete playerPtr;
 	
 	cout << "\n";
 	system("pause"); // 프로그램 종료 전 결과창 유지

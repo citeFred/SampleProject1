@@ -33,7 +33,7 @@ bool Battle::Run()
         // 행동 처리 및 결과 메시지 갱신
         if (action == 1) {
             monster.TakeDamage(player.Attack()); // 객체 스스로가 데미지를 처리하고 있음
-            combatMessage = "=> You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
+            combatMessage = "=>" + player.GetAttackMessage() + " You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
 
             if (monster.isAlive()) {
                 player.TakeDamage(monster.Attack());
@@ -43,7 +43,7 @@ bool Battle::Run()
         }
         else if (action == 2) {
             monster.TakeDamage(player.CriticalAttack()); // 2배 데미지 받음
-            combatMessage = "=> Bash Hit! (Dmg: " + to_string(player.CriticalAttack()) + ")";
+            combatMessage = "=>" + player.GetAttackMessage() + " You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
 
             if (monster.isAlive()) {
                 player.TakeDamage(monster.Attack());

@@ -18,6 +18,10 @@ Player::Player(const string& name, const string& characterClass, bool isHardcore
     movingSpeed = dexterity / 30.0f;
 }
 
+Player::Player(const string& name, const string& characterClass, bool isHardcore,
+    int str, int dex, int vit, int eng)
+        : Character(str, dex, vit, eng, 1), exp(0), expToNextLevel(100) {}
+
 void Player::LevelUp()
 {
     level++;
