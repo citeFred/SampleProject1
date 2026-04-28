@@ -22,6 +22,8 @@ private:
 public:
 	// 생성자
 	Player(const string& name, const string& characterClass, bool isHardcore);
+	// 소멸자
+	virtual ~Player();
 	
 protected:
 	// 자식 클래스(바바리안, 소서리스 등)이 스탯을 직접 지정할때 사용되는 생성자

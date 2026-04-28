@@ -22,6 +22,11 @@ Player::Player(const string& name, const string& characterClass, bool isHardcore
     int str, int dex, int vit, int eng)
         : Character(str, dex, vit, eng, 1), exp(0), expToNextLevel(100) {}
 
+Player::~Player()
+{
+    cout << "[플레이어 소멸]" << name << "\n";
+}
+
 void Player::LevelUp()
 {
     level++;
