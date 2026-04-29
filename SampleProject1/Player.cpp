@@ -72,14 +72,14 @@ void Player::PrintInventory() const
     cout << "==================================================\n";
     cout << "||" << left << setw(46) << "          INVENTORY" << "||\n";
     cout << "==================================================\n";
-    
-    // count개 아이템을 vector에 추가
-    for (int i = 0; i < inventory.size(); i++)
+    int i = 0;
+    // Range-based for문 + const auto&
+    for (const auto& item : inventory)
     {
         string typeStr;
-        if (inventory[i].type == ItemType::Weapon) typeStr = "Weapon";
-        else if (inventory[i].type == ItemType::Armor) typeStr = "Armor";
+        if (item.type == ItemType::Weapon) typeStr = "Weapon";
+        else if (item.type == ItemType::Armor) typeStr = "Armor";
         else typeStr = "Consumable";
-        cout << " > Slot " << i << " < [" << inventory[i].name <<"]\n";
+        cout << " > Slot " << i++ << " < [" << item.name <<"]\n";
     }
 }
