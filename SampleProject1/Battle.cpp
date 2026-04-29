@@ -3,8 +3,10 @@
 #include <cstdlib>
 #include <iomanip>
 
-Battle::Battle(Player& player, Monster& monster)
-    : player(player), monster(monster), combatMessage("[System] Battle Started!") {}
+#include "Mercenary.h"
+
+Battle::Battle(Player& player, Monster& monster, shared_ptr<Mercenary> mercenary)
+    : player(player), monster(monster), mercenary(mercenary), combatMessage("[System] Battle Started!") {}
 
 bool Battle::Run()
 {
@@ -35,6 +37,13 @@ bool Battle::Run()
             monster.TakeDamage(player.Attack()); // 객체 스스로가 데미지를 처리하고 있음
             combatMessage = "=>" + player.GetAttackMessage() + " You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
 
+            if (mercenary && monster.isAlive())
+            {
+                int mercDmg = mercenary->Attack();
+                monster.TakeDamage(mercDmg);
+                combatMessage += "\n=> [" + mercenary->name + "] attacked! (Dmg: " + to_string(mercDmg) + ")"; 
+            }
+            
             if (monster.isAlive()) {
                 player.TakeDamage(monster.Attack());
                 combatMessage += "\n=>" + monster.GetAttackMessage() + " The " 
@@ -45,6 +54,13 @@ bool Battle::Run()
             monster.TakeDamage(player.CriticalAttack()); // 2배 데미지 받음
             combatMessage = "=>" + player.GetAttackMessage() + " You attacked the Goblin! (Dmg: " + to_string(player.Attack()) + ")";
 
+            if (mercenary && monster.isAlive())
+            {
+                int mercDmg = mercenary->Attack();
+                monster.TakeDamage(mercDmg);
+                combatMessage += "\n=> [" + mercenary->name + "] attacked! (Dmg: " + to_string(mercDmg) + ")"; 
+            }
+            
             if (monster.isAlive()) {
                 player.TakeDamage(monster.Attack());
                 combatMessage += "\n=>" + monster.GetAttackMessage() + " The " 
