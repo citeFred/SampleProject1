@@ -149,18 +149,12 @@ int main()
 	int pendingExp = 0;
 	// MonsterDB에서 스탯/드롭풀을 조회 -> 밸런스 조정할때는 MonsterData.cpp만 수정
 	vector<unique_ptr<Monster>> monsters;
-	auto& goblin = monsterDB["Goblin"];
-	auto& fireGoblin = monsterDB["FireGoblin"];
-	auto& skeleton = monsterDB["Skeleton"];
-	auto& wraith = monsterDB["Wraith"];
-	auto& ghoul = monsterDB["Ghoul"];
-	auto& andariel = monsterDB["Andariel"];
-	monsters.push_back(make_unique<Monster>("Goblin", goblin.str, goblin.dex ,goblin.vit ,goblin.eng ,goblin.expReward, 1, goblin.dropPool));
-	// monsters.push_back(make_unique<FireGoblin>("FireGoblin", 50, 0 ,15 ,0 ,50, 1, vector<int>{101, 102}));
-	// monsters.push_back(make_unique<Monster>("Skeleton", 60, 0 ,20 ,0 ,50, 1, vector<int>{103, 202, 101}));
-	// monsters.push_back(make_unique<Monster>("Wraith", 50, 0 ,25 ,0 ,50, 1, vector<int>{301, 302}));
-	// monsters.push_back(make_unique<Monster>("Ghoul", 70, 0 ,35 ,0 ,120, 1, vector<int>{201, 102, 101}));
-	// monsters.push_back(make_unique<Monster>("Andariel", 200, 0 ,150 ,0 ,500, 1, vector<int>{101, 102}));
+	monsters.push_back(make_unique<Monster>("Goblin",  monsterDB["Goblin"], 1));
+	monsters.push_back(make_unique<FireGoblin>("FireGoblin",  monsterDB["FireGoblin"], 1));
+	monsters.push_back(make_unique<Monster>("Skeleton",  monsterDB["Skeleton"], 1));
+	monsters.push_back(make_unique<Monster>("Wraith",  monsterDB["Wraith"], 1));
+	monsters.push_back(make_unique<Monster>("Ghoul",  monsterDB["Ghoul"], 1));
+	monsters.push_back(make_unique<Monster>("Andariel",  monsterDB["Andariel"], 1));
 	
 	for (auto& monster : monsters)
 	{
