@@ -79,7 +79,8 @@ void Player::PrintInventory() const
         string typeStr;
         if (item.type == ItemType::Weapon) typeStr = "Weapon";
         else if (item.type == ItemType::Armor) typeStr = "Armor";
-        else typeStr = "Consumable";
+        else if (item.type == ItemType::Consumable) typeStr = "Consumable";
+        else typeStr = "ETC";
         cout << " > Slot " << i++ << " < [" << item.name <<"]\n";
     }
 }
