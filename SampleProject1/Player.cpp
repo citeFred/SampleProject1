@@ -102,3 +102,15 @@ bool Player::UseItem(const string& itemName)
     }
     return false;
 }
+
+void Player::SortInventory()
+{
+    sort( // <algorithm> 정렬 함수 사용
+        inventory.begin(), inventory.end(), // 정렬 범위 = inventory 전체
+        [](const Item& a, const Item& b) // 3번째 param으로 기준 설정 람다로 직접 함수 구현
+        {
+            return a.name < b.name; // a가 b보다 앞에오면 true -> 오름 차순
+        }
+    );
+    cout << "[인벤토리] 이름 정렬 완료.\n";
+}
