@@ -9,6 +9,7 @@
 #include "Barbarian.h"
 #include "Battle.h"
 #include "FireGoblin.h"
+#include "GameInstance.h"
 #include "ItemData.h"
 #include "Mercenary.h"
 #include "Monster.h"
@@ -134,10 +135,20 @@ int main()
 	system("pause"); // 상태창 확인 대기
 	system("cls");   // 화면 지우기
 	
+	GameInstance& gameInstance = GameInstance::GetGameInstance(); // 생성자 호출(게임 인스턴스 객체 생성) - 1차
+	GameInstance& gameInstance2 = GameInstance::GetGameInstance(); // 생성자 호출(게임 인스턴스 객체 생성) - 2차
+	GameInstance& gameInstance3 = GameInstance::GetGameInstance(); // 생성자 호출(게임 인스턴스 객체 생성) - 3차
+	
+	cout << "[Singleton 주소값 검증] 1차 = " << &gameInstance << endl;
+	cout << "[Singleton 주소값 검증] 2차 = " << &gameInstance2 << endl;
+	cout << "[Singleton 주소값 검증] 3차 = " << &gameInstance3 << endl; 
+	
+	system("pause"); // 상태창 확인 대기
+
 	// ItemDB 메인에 생성
-	unordered_map<int, ItemData> itemDB = createItemDB();
+	auto& itemDB = gameInstance.itemDB;
 	// MonsterDB 메인에 생성
-	unordered_map<string, MonsterData> monsterDB = createMonsterDB();
+	auto& monsterDB = gameInstance.monsterDB;
 	
 	shared_ptr<Mercenary> mercenary = make_shared<Mercenary>("Rogue", 12, playerPtr);
 	player.companion = mercenary; // Player -> Mercenary 연결 (순환참조)
