@@ -87,18 +87,18 @@ void Player::PrintInventory() const
 
 bool Player::UseItem(const string& itemName)
 {
-    for (auto it = inventory.begin(); it != inventory.end(); ++it)
+    auto it = find_if(inventory.begin(), inventory.end(),
+        [&itemName](const Item& item) { return item.name == itemName; });
+    
+    if (it != inventory.end())
     {
-        if (it->name == itemName)
+        if (it->type == ItemType::Consumable)
         {
-            if (it->type == ItemType::Consumable)
-            {
-                Heal(maxHp); // 전체회복
-            }
-            it = inventory.erase(it); // erase 후 유효한 iterator 반환
-            cout << "[인벤토리] 아이템 사용 후 size = " << inventory.size() << " capacity = " << inventory.capacity() << "\n";
-            return true;
+            Heal(maxHp);
         }
+        inventory.erase(it);
+        cout << "[인벤토리] 아이템 사용 후 size = " << inventory.size() << " capacity = " << inventory.capacity() << "\n";
+        return true;
     }
     return false;
 }
